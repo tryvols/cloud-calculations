@@ -1,0 +1,72 @@
+version: "3.8"
+
+services:
+  server:
+    container_name: nestjs_api_prod
+    image: nestjs-api-prod:1.0.0
+    init: true
+    build:
+      context: ./server
+      target: production
+      dockerfile: Dockerfile
+    user: "node"
+    working_dir: /usr/src/app
+    environment:
+      - NODE_ENV=production
+    env_file:
+      - .env
+    volumes:
+      - ./server:/usr/src/app
+      - exclude_node_modules_api_prod:/usr/src/app/node_modules
+    ports:
+      - ${SERVER_PORT}:${SERVER_PORT}
+    tty: true
+    command: "npm run start:prod"
+    networks:
+      - api-network
+    restart: unless-stopped
+    depends_on:
+      - db
+  db:
+    container_name: postgres_dev
+    image: postgres:14-alpine
+    networks:
+      - api-network
+    environment:
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_DB: ${DB_DATABASE_NAME}
+      PG_DATA: /var/lib/postgresql/data
+    ports:
+      - ${DB_PORT}:5432
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - ${ADMINER_PORT}:8080
+    networks:
+      - api-network
+  client:
+    container_name: react_client_prod
+    image: react-client-prod:1.0.0
+    build:
+      context: ./client
+      target: production
+      dockerfile: Dockerfile
+    working_dir: /usr/share/nginx/html
+    volumes:
+      - client_build_prod:/usr/share/nginx/html
+    ports:
+      - ${CLIENT_PORT}:80
+    tty: true
+    restart: unless-stopped
+
+networks:
+  api-network:
+
+volumes:
+  client_build_prod:
+  exclude_node_modules_api_prod:
+  pgdata:

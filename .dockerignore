@@ -1,0 +1,11 @@
+*/node_modules
+*/README.md
+*/Dockerfile
+*/coverage
+*/.git
+*/.github
+*/.vscode
+
+# Node Files #
+*/npm-debug.log
+*/npm-debug.log.*

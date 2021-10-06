@@ -1,0 +1,28 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug: NestJS",
+      "type": "node",
+      "request": "attach",
+      "remoteRoot": "/usr/src/app",
+      "localRoot": "${workspaceFolder}/server",
+      "protocol": "inspector",
+      // Uses standard node.js debug port
+      "port": 9229,
+      "address": "0.0.0.0",
+      "restart": true,
+      "skipFiles": [
+        "<node_internals>/**"
+      ]
+    },
+    {
+      "name": "Debug: React",
+      "type": "chrome",
+      "request": "launch",
+      // Client application port must be synced with .env file's CLIENT_PORT variable
+      "url": "http://localhost:3001",
+      "webRoot": "${workspaceRoot}/client"
+    }
+  ]
+}
