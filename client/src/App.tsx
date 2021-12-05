@@ -1,25 +1,26 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { Router, Switch } from 'react-router-dom';
+import './App.scss';
+import { NavigationScheme } from './common/navigation/scheme';
+import { history } from './common/navigation/history';
+import { IocProvider } from './common/ioc/ioc-provider';
+import { AppThemeProvider } from './common/theme';
+import { DatePickersProvider } from './common/components/form-fields/date-pickers.provider';
+import 'mobx-react/batchingForReactDom';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React ++
-        </a>
-      </header>
-    </div>
+    <IocProvider>
+      <AppThemeProvider>
+        <DatePickersProvider>
+          <Router history={history}>
+            <Switch>
+              <NavigationScheme />
+            </Switch>
+          </Router>
+        </DatePickersProvider>
+      </AppThemeProvider>
+    </IocProvider>
   );
 }
 
