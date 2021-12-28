@@ -10,7 +10,7 @@ RUN npm ci
 ENV PATH=/usr/src/node_modules/.bin:$PATH
 WORKDIR /usr/src/app
 COPY . .
-CMD npm run build
+RUN npm run build
 
 
 FROM node:${NODE_V} AS production
@@ -21,6 +21,7 @@ COPY package*.json ./
 RUN npm ci --only=production
 ENV PATH=/usr/src/node_modules/.bin:$PATH
 WORKDIR /usr/src/app
+COPY package*.json ./
 
 EXPOSE 3000
 

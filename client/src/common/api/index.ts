@@ -3,8 +3,10 @@ import { Token } from '../auth/token';
 
 export const API$ = Symbol('API');
 
+const host = window?.location?.hostname || "localhost";
+
 export const api: AxiosInstance = axios.create({
-  baseURL: 'http://localhost:3000/',
+  baseURL: `http://${host}:3000/`,
   responseType: 'json',
 });
 

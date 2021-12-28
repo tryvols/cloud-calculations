@@ -22,7 +22,7 @@ class TokenService {
   }
 
   get(): string {
-    return this.isValid ? this.data.token : '';
+    return this.isValid() ? this.data.token : '';
   }
 
   isValid(): boolean {

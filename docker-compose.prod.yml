@@ -3,7 +3,7 @@ version: "3.8"
 services:
   server:
     container_name: nestjs_api_prod
-    image: nestjs-api-prod:1.0.0
+    image: tryvols/nestjs-api-prod
     init: true
     build:
       context: ./server
@@ -49,7 +49,7 @@ services:
       - api-network
   client:
     container_name: react_client_prod
-    image: react-client-prod:1.0.0
+    image: tryvols/react-client-prod
     build:
       context: ./client
       target: production
