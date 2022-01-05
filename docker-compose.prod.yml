@@ -6,7 +6,7 @@ services:
     image: tryvols/nestjs-api-prod
     init: true
     build:
-      context: ./server
+      context: ./server/gateway
       target: production
       dockerfile: Dockerfile
     working_dir: /usr/src/app
@@ -15,10 +15,34 @@ services:
     env_file:
       - .env
     volumes:
-      - ./server:/usr/src/app
+      - ./server/gateway:/usr/src/app
       - exclude_node_modules_api_prod:/usr/src/app/node_modules
     ports:
       - ${SERVER_PORT}:${SERVER_PORT}
+    tty: true
+    command: "npm run start:prod"
+    networks:
+      - api-network
+    restart: unless-stopped
+    depends_on:
+      - db
+      - token_service
+  token_service:
+    container_name: nestjs_token_prod
+    image: tryvols/nestjs-token-prod
+    init: true
+    build:
+      context: ./server/token
+      target: production
+      dockerfile: Dockerfile
+    working_dir: /usr/src/app
+    environment:
+      - NODE_ENV=production
+    env_file:
+      - .env
+    volumes:
+      - ./server/token:/usr/src/app
+      - exclude_node_modules_token_prod:/usr/src/app/node_modules
     tty: true
     command: "npm run start:prod"
     networks:
@@ -68,4 +92,5 @@ networks:
 volumes:
   client_build_prod:
   exclude_node_modules_api_prod:
+  exclude_node_modules_token_prod:
   pgdata:
